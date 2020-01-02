@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+{% block header %}
+    <h1 class="ml-3">
+        welcome to hawt reads
+    </h1>
+{% endblock %}
+{% block nav %}
+    <form class="form-inline my-2 my-lg-0" action="{{ url_for('index') }}" method="post">
+        <label class="sr-only" for="logout_input">
+            logout
+        </label>
+        <input id="logout_input" type="submit" class="btn btn-outline-light my-2 my-sm-0" name="btn" value="logout">
+    </form>
+{% endblock %}
+{% block body %}
+    <h2 class="ml-3">
+        search for books by title, author, or isbn
+    </h2>
+    {% if error %}
+        <div class="row ml-3">
+            <div class="alert alert-danger error" role="alert">
+                {{ error }}
+            </div>
+        </div>
+    {% endif %}
+    <form class="form-row ml-3" action="{{ url_for('index') }}" method="get">
+        <div class="form-group">
+            <label class="sr-only" for="search_input">
+                search books
+            </label>
+            <input id="search_input" type="search" name="query" placeholder="find a hawt read" required>
+        </div>
+        <div class="w-100"></div>
+        <div class="form-group">
+            search by:
+            <input type="radio" name="search_type" id="1" value="title" checked>
+            <label for="1">
+                title
+            </label>
+            <input type="radio" name="search_type" id="2" value="isbn">
+            <label for="2">
+                isbn
+            </label>
+            <input type="radio" name="search_type" id="3" value="author">
+            <label for="3">
+                author
+            </label>
+        </div>
+        <div class="w-100"></div>
+        <button type="submit" class="btn btn-outline-light btn-dark">
+            go
+        </button>
+    </form>
+    {% if books %}  
+        {% for book in books %}
+            <div class="row border w-50 ml-3 mt-1 p-1">
+                <div class="col-sm-6">    
+                    <a href="{{ url_for('book', book_id=book.id) }}">
+                        {{ book.title }}
+                    </a>
+                </div>
+                <div class="w-100"></div>
+                <div class="co-sm-4 ml-5">
+                    author: {{ book.author }}
+                </div>
+                <div class="w-100"></div>
+                <div class="co-sm-4 ml-5">
+                    year: {{ book.year }}
+                </div>
+                <div class="w-100"></div>
+                <div class="co-sm-4 ml-5">
+                    isbn: {{ book.isbn }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

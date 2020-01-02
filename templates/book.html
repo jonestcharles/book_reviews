@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ book.title }}
+{% endblock %}
+{% block header %}
+    <h1 class="ml-3">
+        {{ book.title }}
+    </h1>
+{% endblock %}
+{% block nav %}
+    <form class="form-inline my-2 my-lg-0" action="{{ url_for('index') }}" method="post">
+        <label class="sr-only" for="logout_input">
+            logout
+        </label>
+        <input id="logout_input" type="submit" class="btn btn-outline-light my-2 my-sm-0" name="btn" value="logout">
+    </form>
+{% endblock %}
+{% block body %}
+    {% if error %}
+        <div class="row ml-3">
+            <div class="alert alert-danger error" role="alert">
+                {{ error }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="row ml-3">
+        <div class="col-sm-4 ml-3 font-italic">
+            by {{ book.author }}
+        </div>
+        <div class="w-100"></div>
+        <div class="col-sm-4 ml-3 font-italic">
+            published {{ book.year }}
+        </div>
+        <div class="w-100"></div>
+        <div class="col-sm-4 ml-3 font-italic">
+            isbn: {{ book.isbn }}
+        </div>
+    </div>
+    <div class=" row ml-3">
+            average Goodreads rating: {{ avg_rating }}, based on {{ num_ratings }} reviews
+    </div>
+    <div class=" row ml-3">
+        submit a GET request to /api/"isbn" to recieve a json of this book's info!
+    </div>
+    <form class="form-row ml-3" action="{{ url_for('book', book_id=book.id) }}" id="comment" method="post">
+        <div class="form-group">
+            <label for="review_input">
+                leave a review for {{ book.title }}:
+            </label>
+            <br>
+            <textarea id="review_input" rows="4" cols="75" name="commentbox" form="comment"></textarea>
+        </div>
+        <div class="w-100"></div>
+        <button type="submit" class="btn btn-outline-light btn-dark">
+            submit review
+        </button>
+    </form>
+    
+    <h2 class="ml-3">
+        reviews of {{ book.title }} from readers like you
+    </h2>
+    {% if reviews %}
+        {% for rev in reviews %}
+            <div class="row border w-50 ml-3 mt-1 p-1">
+                <div class="col-sm-6">
+                    from {{ rev.username }}
+                </div>
+                <div class="w-100"></div>
+                <div class="co-sm-4 ml-5">
+                    "{{ rev.review }}""
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="ml-3">
+            no reviews...yet...
+        </p>  
+    {% endif %}
+{% endblock %}
